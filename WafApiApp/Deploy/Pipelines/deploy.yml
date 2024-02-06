@@ -9,8 +9,8 @@ variables:
 steps:
   - task: AzurePowerShell@5
     displayName: 'Deploy Frontdoor origins'
-    AzureSubscription: 'deploy-spn-cosmos'
     inputs:
+      AzureSubscription: 'deploy-spn-cosmos'
       targetType: 'filePath'
       filePath: $(System.DefaultWorkingDirectory)\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
       arguments: >
