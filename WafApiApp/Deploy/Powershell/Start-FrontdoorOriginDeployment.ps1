@@ -21,14 +21,16 @@ param {
     $CosmosKey,
 
     [System.String]
-    $FrontdoorName,
+    $Frontdoor,
 
     [System.String]
-    $ResourceGroupname
+    $Keyvault,
+
+    [System.String]
+    $ResourceGroup
 }
 
-
-$cosmosContext = New-CosmosDbContext -Account $CosmosAccount -Database $CosmosDatabase -ResourceGroupName $ResourceGroupname
+$cosmosContext = New-CosmosDbContext -Account $CosmosAccount -Database $CosmosDatabase -ResourceGroupName $ResourceGroup
 $continuationToken = $null
 $OriginDeployments = [System.Collections.ArrayList]::new()
 do {
@@ -59,9 +61,9 @@ do {
 
 
 $deployParameters = @{
-    FrontdoorName = $FrontdoorName
+    FrontdoorName = $Frontdoor
     appOrigins = $OriginDeployments
 }
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupname -TemplateFile $TemplateFile -TemplateParameterObject $deployParameters
+New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroup -TemplateFile $TemplateFile -TemplateParameterObject $deployParameters
 
 

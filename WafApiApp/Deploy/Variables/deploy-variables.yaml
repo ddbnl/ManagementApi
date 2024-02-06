@@ -1,0 +1,7 @@
+variables:
+  v_cosmos_account: "ddb-cosmos"
+  v_cosmos_database: "ApiDatabase"
+  v_cosmos_container: "WafRules"
+  v_frontdoor_name: "fdoor-profile-cosmos"
+  v_keyvault_name: "kv-ddb-cosmos"
+  v_resource_group_name: "cosmos-rg"

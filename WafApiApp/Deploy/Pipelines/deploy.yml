@@ -2,6 +2,10 @@
 pool:
   vmImage: 'windows-latest'
 
+variables:
+  - template: $(System.DefaultWorkingDirectory)\Deploy\Variables\deploy-variables.yaml
+
+
 steps:
   - task: PowerShell@2
     displayName: 'Deploy Frontdoor origins'
@@ -11,6 +15,9 @@ steps:
       filePath: $(System.DefaultWorkingDirectory)\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
       arguments: >
         -TemplateFile '$(System.DefaultWorkingDirectory)\Deploy\BICEP\FrontDoorOrigin.bicep'
-        -CosmosName 'ddb-cosmos'
-        -CosmosDatabase 'ApiDatabase'
-        -CosmosContainer 'WafRules'
+        -CosmosAccount '$(v_cosmos_account)'
+        -CosmosDatabase '$(v_cosmos_database)'
+        -CosmosContainer '$(v_cosmos_container)'
+        -Keyvault '$(v_keyvault_name)'
+        -FrontdoorName '$(v_frontdoor_name)'
+        -ResourceGroupName '$(v_resource_group_name)'
