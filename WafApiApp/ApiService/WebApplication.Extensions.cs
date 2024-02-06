@@ -24,6 +24,7 @@ public static class WebApplicationExtensions {
             operation.Summary = "Get a WAF rule";
             return operation;
         })
+        .RequireAuthorization(["user"])
         .Produces<WafRule>(StatusCodes.Status200OK);
 
         return app;
