@@ -3,7 +3,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  - template: '$(System.DefaultWorkingDirectory)\Deploy\Variables\deploy-variables.yaml'
+  - template: '$(Agent.BuildDirectory)\Deploy\Variables\deploy-variables.yaml'
 
 
 steps:
