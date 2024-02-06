@@ -3,7 +3,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  - template: $(Pipeline.Workspace)\Deploy\Variables\deploy-variables.yaml
+  - template: ${{ Pipeline.Workspace }}\Deploy\Variables\deploy-variables.yaml
 
 
 steps:
