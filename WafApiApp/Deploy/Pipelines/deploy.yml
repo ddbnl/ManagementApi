@@ -2,7 +2,7 @@
 pool: 'vmss'
 
 variables:
-  - template: $(Build.SourcesDirectory)\Deploy\Variables\deploy-variables.yaml
+  - template: ..\..\Deploy\Variables\deploy-variables.yaml
 
 jobs:
   - job: CosmosJob
