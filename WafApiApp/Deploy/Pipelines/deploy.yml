@@ -8,7 +8,7 @@ jobs:
   - job: CosmosJob
     steps:
     - checkout: self
-      - powershell: |
+    - powershell: |
          Install-PackageProvider NuGet -Force
          Import-PackageProvider NuGet -Force
          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
