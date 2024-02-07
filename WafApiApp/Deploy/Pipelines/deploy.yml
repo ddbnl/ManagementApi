@@ -7,6 +7,7 @@ variables:
 jobs:
   - job: CosmosJob
     steps:
+      - checkout: self
       #- powershell: |
       #    Install-PackageProvider NuGet -Force
       #    Import-PackageProvider NuGet -Force
