@@ -1,3 +1,4 @@
+using System.Net;
 using ApiService.Cosmos.Wrapper;
 using ApiService.Cosmos.Wrapper.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,12 @@ public static class WebApplicationExtensions {
 
                 ArgumentNullException.ThrowIfNull(id);
 
-                return await db.GetItem<WafRule>(id);
+                try {
+                    WafRule? wafRule = await db.GetItem<WafRule>(id);
+                    return Results.Ok(wafRule);
+                } catch (Microsoft.Azure.Cosmos.CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound) {
+                    return Results.NotFound("WAF Rule ID not found.");
+                }
             }
         )
         .WithName("GetWaf")
