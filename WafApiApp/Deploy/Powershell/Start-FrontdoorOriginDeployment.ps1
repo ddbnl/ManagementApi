@@ -1,9 +1,3 @@
-Install-Module Az
-Install-Module CosmosDB
-
-Import-Module Az
-Import-Module CosmosDB
-
 param {
     [System.String]
     $TemplateFile,
