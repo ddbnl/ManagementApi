@@ -10,35 +10,35 @@ public static class WebApplicationExtensions {
 
     public static WebApplication MapGets(this WebApplication app) {
 
-        app.MapGet("api/waf_rule", async (
+        app.MapGet("api/frontdoor/origin", async (
             [FromServices] CosmosWrapper db,
             [FromQuery] string? id) => {
 
                 ArgumentNullException.ThrowIfNull(id);
 
                 try {
-                    WafRule? wafRule = await db.GetItem<WafRule>(id);
+                    FrontdoorOrigin? wafRule = await db.GetItem<FrontdoorOrigin>(id);
                     return Results.Ok(wafRule);
                 } catch (Microsoft.Azure.Cosmos.CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound) {
-                    return Results.NotFound("WAF Rule ID not found.");
+                    return Results.NotFound("frontdoor origin ID not found.");
                 }
             }
         )
-        .WithName("GetWaf")
+        .WithName("GetFrontdoorOrigin")
         .WithOpenApi(operation => {
-            operation.Description = "Get a WAF rule";
-            operation.Summary = "Get a WAF rule";
+            operation.Description = "Get a registered frontdoor origin";
+            operation.Summary = "Get a registered frontdoor origin";
             return operation;
         })
         .RequireAuthorization(["user"])
-        .Produces<WafRule>(StatusCodes.Status200OK);
+        .Produces<FrontdoorOrigin>(StatusCodes.Status200OK);
 
         return app;
     }
 
     public static WebApplication MapPuts(this WebApplication app) {
 
-        app.MapPut("api/waf_rule", async (
+        app.MapPut("api/frontdoor/origin", async (
             [FromServices] CosmosWrapper db,
             [FromBody]
             [FromQuery] string? id, string? description, string? hostname, int? httpPort, int? httpsPort) => {
@@ -47,18 +47,19 @@ public static class WebApplicationExtensions {
                 ArgumentNullException.ThrowIfNull(hostname);
                 ArgumentNullException.ThrowIfNull(httpPort);
                 ArgumentNullException.ThrowIfNull(httpsPort);
-                return await db.AddItem<WafRule>(
-                    new WafRule(id) {Description=description, Hostname=hostname, HttpPort=httpPort, HttpsPort=httpsPort}
+                return await db.AddItem<FrontdoorOrigin>(
+                    new FrontdoorOrigin(id) {Description=description, Hostname=hostname, HttpPort=httpPort, HttpsPort=httpsPort}
                 );
             }
         )
-        .WithName("PutWaf")
+        .WithName("PutFrontdoorOrigin")
         .WithOpenApi(operation => {
-            operation.Description = "Create a new WAF rule";
-            operation.Summary = "Create a new WAF rule";
+            operation.Description = "Register a new frontdoor origin";
+            operation.Summary = "Register a new frontdoor origin";
             return operation;
         })
-        .Produces<WafRule>(StatusCodes.Status200OK);
+        .RequireAuthorization(["user", "spn"])
+        .Produces<FrontdoorOrigin>(StatusCodes.Status200OK);
 
         return app;
     }
