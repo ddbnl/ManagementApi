@@ -7,13 +7,13 @@ variables:
 jobs:
   - job: CosmosJob
     steps:
-      - powershell: |
-          Install-PackageProvider NuGet -Force
-          Import-PackageProvider NuGet -Force
-          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-          Install-Module -Name Az -Force -AllowClobber
-          Install-Module -Name Az.Accounts -Force -AllowClobber
-        displayName: 'Install Powershell Az Modules'
+      #- powershell: |
+      #    Install-PackageProvider NuGet -Force
+      #    Import-PackageProvider NuGet -Force
+      #    Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+      #    Install-Module -Name Az -Force -AllowClobber
+      #    Install-Module -Name Az.Accounts -Force -AllowClobber
+      #  displayName: 'Install Powershell Az Modules'
 
       - task: AzurePowerShell@5
         displayName: 'Deploy Frontdoor origins'
@@ -23,7 +23,7 @@ jobs:
           filePath: $(System.DefaultWorkingDirectory)\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
           azurePowerShellVersion: 'LatestVersion'
           arguments: >
-            -TemplateFile '$(System.DefaultWorkingDirectory)\Deploy\BICEP\FrontDoorOrigin.bicep'
+            -TemplateFile '../../Deploy\BICEP\FrontDoorOrigin.bicep'
             -CosmosAccount '$(v_cosmos_account)'
             -CosmosDatabase '$(v_cosmos_database)'
             -CosmosContainer '$(v_cosmos_container)'
