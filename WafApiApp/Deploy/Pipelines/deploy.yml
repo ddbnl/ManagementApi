@@ -15,7 +15,7 @@ jobs:
          Install-Module -Name Az -Force -AllowClobber
          Install-Module -Name Az.Accounts -Force -AllowClobber
          Install-Module -Name CosmosDB -Force -AllowClobber
-       displayName: 'Install Powershell Az Modules'
+      displayName: 'Install Powershell Az Modules'
 
     - task: AzurePowerShell@5
       displayName: 'Deploy Frontdoor origins'
