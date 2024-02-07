@@ -24,7 +24,7 @@ param (
     $ResourceGroup
 )
 
-Write-Warning "TEST"
+Write-Warning "TEST $CosmosAccount $CosmosDatabase"
 $cosmosContext = New-CosmosDbContext -Account $CosmosAccount -Database $CosmosDatabase -ResourceGroupName $ResourceGroup
 $continuationToken = $null
 $OriginDeployments = [System.Collections.ArrayList]::new()

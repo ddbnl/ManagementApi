@@ -4,15 +4,16 @@ Import-Module Microsoft.Graph
 # Create app reg
 Connect-MgGraph -Scopes "Application.ReadWrite.All" -TenantId '4c244900-c482-4688-b4c5-a726bc7e05d7' 
 $publicClientApplication = @{
-    RedirectUris=@("http://localhost:5031")
+    RedirectUris=@("http://localhost:5031/swagger/oauth2-redirect.html")
 }
 
 $identifierUris = @("api://api-service")
 
+$permissionScopeGuid = $(New-Guid)
 $apiApplication = @{
     Oauth2PermissionScopes = @(
         @{
-            Id=$(New-Guid)
+            Id=$permissionScopeGuid
             Value="full"
             AdminConsentDescription="Full Access"
             AdminConsentDisplayName="Full Access"
@@ -41,8 +42,11 @@ $appRoles = @(
     }
 )
 
-$application = New-MgApplication -DisplayName 'ApiService' -SignInAudience 'AzureADMyOrg' -PublicClient $publicClientApplication `
+$application = New-MgApplication -DisplayName 'ApiService' -SignInAudience 'AzureADMyOrg' `
     -IdentifierUris $identifierUris ` -Api $apiApplication -AppRoles $appRoles 
+
+$application = New-MgApplication -DisplayName 'ApiServiceSwagger' -SignInAudience 'AzureADMyOrg' -PublicClient $publicClientApplication `
+     
 
 $servicePrincipalId= @{ "AppId" = $application.AppId }
 New-MgServicePrincipal -BodyParameter $servicePrincipalId
