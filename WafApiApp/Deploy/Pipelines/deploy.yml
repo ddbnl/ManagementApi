@@ -1,5 +1,6 @@
 
-pool: 'vmss'
+  pool:
+    vmImage: 'windows-latest'
 
 variables:
   - template: ..\..\Deploy\Variables\deploy-variables.yaml
@@ -8,14 +9,12 @@ jobs:
   - job: CosmosJob
     steps:
     - checkout: self
-    # - powershell: |
-    #      Install-PackageProvider NuGet -Force
-    #      Import-PackageProvider NuGet -Force
-    #      Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-    #      Install-Module -Name Az -Force -AllowClobber
-    #      Install-Module -Name Az.Accounts -Force -AllowClobber
-    #      Install-Module -Name CosmosDB -Force -AllowClobber
-    #   displayName: 'Install Powershell Az Modules'
+    - powershell: |
+         Install-PackageProvider NuGet -Force
+         Import-PackageProvider NuGet -Force
+         Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+         Install-Module -Name CosmosDB -Force -AllowClobber
+      displayName: 'Install Powershell Az Modules'
     - task: AzurePowerShell@5
       displayName: 'Deploy Frontdoor origins'
       inputs:
