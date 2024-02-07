@@ -21,10 +21,10 @@ jobs:
       inputs:
         AzureSubscription: 'deploy-spn-cosmos'
         targetType: 'filePath'
-        filePath: $(Build.SourcesDirectory)\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
+        filePath: ..\..\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
         azurePowerShellVersion: 'LatestVersion'
         arguments: >
-          -TemplateFile $(Build.SourcesDirectory)\Deploy\BICEP\FrontDoorOrigin.bicep
+          -TemplateFile ..\..\Deploy\BICEP\FrontDoorOrigin.bicep
           -CosmosAccount '$(v_cosmos_account)'
           -CosmosDatabase '$(v_cosmos_database)'
           -CosmosContainer '$(v_cosmos_container)'
