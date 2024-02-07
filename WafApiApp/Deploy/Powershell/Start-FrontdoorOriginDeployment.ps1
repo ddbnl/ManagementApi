@@ -1,4 +1,4 @@
-param {
+param (
     [System.String]
     $TemplateFile,
 
@@ -22,7 +22,7 @@ param {
 
     [System.String]
     $ResourceGroup
-}
+)
 
 Write-Warning "TEST"
 $cosmosContext = New-CosmosDbContext -Account $CosmosAccount -Database $CosmosDatabase -ResourceGroupName $ResourceGroup
