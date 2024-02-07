@@ -1,6 +1,6 @@
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'vmss'
 
 variables:
   - template: ../../Deploy\Variables\deploy-variables.yaml
