@@ -7,6 +7,12 @@ variables:
 jobs:
   - job: CosmosJob
     steps:
+      - powershell: |
+          Install-Module -Name Az -Force -AllowClobber
+          Install-Module -Name Az.Accounts -Force -AllowClobber
+        runScriptInSeparateScope: true
+        displayName: 'Install Powershell Az Modules'
+
       - task: AzurePowerShell@5
         displayName: 'Deploy Frontdoor origins'
         inputs:
@@ -14,7 +20,6 @@ jobs:
           targetType: 'filePath'
           filePath: $(System.DefaultWorkingDirectory)\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
           azurePowerShellVersion: 'LatestVersion'
-          pwsh: true
           arguments: >
             -TemplateFile '$(System.DefaultWorkingDirectory)\Deploy\BICEP\FrontDoorOrigin.bicep'
             -CosmosAccount '$(v_cosmos_account)'
