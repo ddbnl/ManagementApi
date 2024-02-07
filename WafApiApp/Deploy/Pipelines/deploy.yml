@@ -26,7 +26,7 @@ jobs:
         ScriptType: 'filePath'
         ScriptPath: $(Build.SourcesDirectory)\WafApiApp\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
         azurePowerShellVersion: 'LatestVersion'
-        arguments: >
+        ScriptArguments: >
           -TemplateFile $(Build.SourcesDirectory)\WafApiApp\Deploy\BICEP\FrontDoorOrigin.bicep
           -CosmosAccount '$(v_cosmos_account)'
           -CosmosDatabase '$(v_cosmos_database)'
