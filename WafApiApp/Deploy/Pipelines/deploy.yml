@@ -2,12 +2,12 @@
 pool: 'vmss'
 
 variables:
-  - template: ../../Deploy\Variables\deploy-variables.yaml
+  - template: ..\..\Deploy\Variables\deploy-variables.yaml
 
 jobs:
   - job: CosmosJob
     steps:
-      - checkout: self
+    - checkout: self
       #- powershell: |
       #    Install-PackageProvider NuGet -Force
       #    Import-PackageProvider NuGet -Force
@@ -16,18 +16,18 @@ jobs:
       #    Install-Module -Name Az.Accounts -Force -AllowClobber
       #  displayName: 'Install Powershell Az Modules'
 
-      - task: AzurePowerShell@5
-        displayName: 'Deploy Frontdoor origins'
-        inputs:
-          AzureSubscription: 'deploy-spn-cosmos'
-          targetType: 'filePath'
-          filePath: ../../Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
-          azurePowerShellVersion: 'LatestVersion'
-          arguments: >
-            -TemplateFile '../../Deploy\BICEP\FrontDoorOrigin.bicep'
-            -CosmosAccount '$(v_cosmos_account)'
-            -CosmosDatabase '$(v_cosmos_database)'
-            -CosmosContainer '$(v_cosmos_container)'
-            -Keyvault '$(v_keyvault_name)'
-            -FrontdoorName '$(v_frontdoor_name)'
-            -ResourceGroupName '$(v_resource_group_name)'
+    - task: AzurePowerShell@5
+      displayName: 'Deploy Frontdoor origins'
+      inputs:
+        AzureSubscription: 'deploy-spn-cosmos'
+        targetType: 'filePath'
+        filePath: ..\..\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
+        azurePowerShellVersion: 'LatestVersion'
+        arguments: >
+          -TemplateFile '..\..\Deploy\BICEP\FrontDoorOrigin.bicep'
+          -CosmosAccount '$(v_cosmos_account)'
+          -CosmosDatabase '$(v_cosmos_database)'
+          -CosmosContainer '$(v_cosmos_container)'
+          -Keyvault '$(v_keyvault_name)'
+          -FrontdoorName '$(v_frontdoor_name)'
+          -ResourceGroupName '$(v_resource_group_name)'
