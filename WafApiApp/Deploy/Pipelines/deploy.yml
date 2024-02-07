@@ -10,7 +10,6 @@ jobs:
       - powershell: |
           Install-Module -Name Az -Force -AllowClobber
           Install-Module -Name Az.Accounts -Force -AllowClobber
-        runScriptInSeparateScope: true
         displayName: 'Install Powershell Az Modules'
 
       - task: AzurePowerShell@5
