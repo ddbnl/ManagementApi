@@ -24,7 +24,6 @@ param (
     $ResourceGroup
 )
 
-Write-Warning "TEST $CosmosAccount $CosmosDatabase"
 $cosmosContext = New-CosmosDbContext -Account $CosmosAccount -Database $CosmosDatabase -ResourceGroupName $ResourceGroup
 $continuationToken = $null
 $OriginDeployments = [System.Collections.ArrayList]::new()
@@ -41,7 +40,7 @@ do {
         $getCosmosItemsParams.ContinuationToken = $continuationToken
     }
 
-    $newDocuments = Get-CosmosDbDocument @getCosmosItemsParams | ConvertFrom-Json -Depth 9
+    $newDocuments = Get-CosmosDbDocument @getCosmosItemsParams | ConvertFrom-Json
     foreach ($document in $newDocuments.Documents) {
         $originDeployment = @{
             appId = $document.id
