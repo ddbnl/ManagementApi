@@ -20,8 +20,8 @@ jobs:
       displayName: 'Deploy Frontdoor origins'
       inputs:
         AzureSubscription: 'deploy-spn-cosmos'
-        targetType: 'filePath'
-        filePath: ..\..\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
+        ScriptType: 'filePath'
+        ScriptPath: ..\..\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
         azurePowerShellVersion: 'LatestVersion'
         arguments: >
           -TemplateFile ..\..\Deploy\BICEP\FrontDoorOrigin.bicep
