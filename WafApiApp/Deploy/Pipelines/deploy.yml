@@ -2,7 +2,7 @@
 pool: 'vmss'
 
 variables:
-  - template: ..\..\Deploy\Variables\deploy-variables.yaml
+  - template: $(Build.SourcesDirectory)\Deploy\Variables\deploy-variables.yaml
 
 jobs:
   - job: CosmosJob
@@ -21,10 +21,10 @@ jobs:
       inputs:
         AzureSubscription: 'deploy-spn-cosmos'
         targetType: 'filePath'
-        filePath: ..\..\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
+        filePath: $(Build.SourcesDirectory)\Deploy\Powershell\Start-FrontdoorOriginDeployment.ps1
         azurePowerShellVersion: 'LatestVersion'
         arguments: >
-          -TemplateFile '..\..\Deploy\BICEP\FrontDoorOrigin.bicep'
+          -TemplateFile $(Build.SourcesDirectory)\Deploy\BICEP\FrontDoorOrigin.bicep
           -CosmosAccount '$(v_cosmos_account)'
           -CosmosDatabase '$(v_cosmos_database)'
           -CosmosContainer '$(v_cosmos_container)'
