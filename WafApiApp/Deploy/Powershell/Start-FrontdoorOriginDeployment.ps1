@@ -24,7 +24,7 @@ param {
     $ResourceGroup
 }
 
-Install-Module -Name Az -Scope AllUsers
+Write-Warning "TEST"
 $cosmosContext = New-CosmosDbContext -Account $CosmosAccount -Database $CosmosDatabase -ResourceGroupName $ResourceGroup
 $continuationToken = $null
 $OriginDeployments = [System.Collections.ArrayList]::new()
