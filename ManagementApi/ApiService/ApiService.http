@@ -1,0 +1,5 @@
+@ApiService_HostAddress = https://capp-cosmos.thankfulmeadow-aa769468.westeurope.azurecontainerapps.io/swagger/index.html:443
+
+GET {{ApiService_HostAddress}}/
+Accept: application/json
+

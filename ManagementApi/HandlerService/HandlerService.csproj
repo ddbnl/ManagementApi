@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CosmosWrapper\CosmosWrapper.csproj" />
+    <ProjectReference Include="..\QueueWrapper\QueueWrapper.csproj" />
+    <ProjectReference Include="..\SharedModels\SharedModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
+    <PackageReference Include="Azure.ResourceManager.CDN" Version="1.2.0" />
+    <PackageReference Include="Azure.ResourceManager.FrontDoor" Version="1.2.0" />
+    <PackageReference Include="microsoft.applicationinsights" Version="2.22.0" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.38.1" />
+    <PackageReference Include="microsoft.extensions.dependencyinjection" Version="8.0.0" />
+    <PackageReference Include="microsoft.extensions.logging" Version="8.0.0" />
+    <PackageReference Include="microsoft.extensions.logging.applicationinsights" Version="2.22.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

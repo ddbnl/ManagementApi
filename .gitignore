@@ -1,2 +1,2 @@
-WafApiApp/ApiService/bin
-WafApiApp/ApiService/obj
+**/bin
+**/obj

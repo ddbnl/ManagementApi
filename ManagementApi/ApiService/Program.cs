@@ -1,30 +1,44 @@
-using ApiService;
-using ApiService.Cosmos.Wrapper;
 using Microsoft.Azure.Cosmos;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
-
+using Microsoft.Extensions.Logging.ApplicationInsights;
+using ManagementApi.Cosmos.Wrapper;
+using ManagementApi.Queue.Wrapper;
+using ManagementApi.ApiService.Routers;
+using Azure.Identity;
 
 
 // Get Cosmos secret
-string kvUri = "https://kv-ddb-cosmos.vault.azure.net";
-SecretClient client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
-KeyVaultSecret secret = await client.GetSecretAsync("cosmos");
+string cosmosSecret = Environment.GetEnvironmentVariable("cosmos")!;
+string appInsightsSecret = Environment.GetEnvironmentVariable("appinsights")!;
 
 // Initialize database
 CosmosDatabaseConfig cosmosDatabaseConfig = new("ApiDatabase", throughput: 400);
-CosmosContainerConfig cosmosContainerConfig = new("WafRules", throughput: 400, partitionKeyPath: "/id", 
+CosmosContainerConfig containerConfig = new("Requests", throughput: 400, partitionKeyPath: "/type", 
     indexingMode: IndexingMode.Consistent, automatic: true, includedPath: new IncludedPath { Path = "/*" });
+CosmosWrapper.Database = cosmosDatabaseConfig;
+CosmosWrapper.CosmosContainers.Add(CosmosContainersEnum.Requests, containerConfig);
 
-CosmosWrapper cosmosWrapper = await new CosmosWrapper()
-    .WithEndpointUri("https://ddb-cosmos.documents.azure.com:443/")
-    .WithPrimaryKey(secret.Value)
-    .CreateContainer(cosmosContainerConfig, cosmosDatabaseConfig);
+// Initialize queue
+QueueWrapper.Connect();
 
 // Initialize app
 var builder = WebApplication.CreateBuilder(args);
+
+//  Initialize logging
+DefaultAzureCredential credential = new DefaultAzureCredential();
+builder.Logging.AddApplicationInsights(
+        configureTelemetryConfiguration: (config) => {
+            config.ConnectionString = appInsightsSecret;
+            config.SetAzureTokenCredential(credential);
+        },
+        configureApplicationInsightsLoggerOptions: (options) => { }
+);
+builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(typeof(Program).FullName, LogLevel.Warning);  
+
+//  Initialize services
+builder.Services.AddScoped<RouterBase, FrontdoorRouter>();
+builder.Services.AddScoped<RouterBase, StatusRouter>();
 
 builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration, "AzureAd");
 builder.Services.AddAuthorization(options =>
@@ -32,6 +46,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("user", policy => policy.RequireRole("user"));
     options.AddPolicy("spn", policy => policy.RequireRole("spn"));
 });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
@@ -62,7 +77,6 @@ builder.Services.AddSwaggerGen(c =>
         }});
 });
 
-builder.Services.AddSingleton(new CosmosWrapper());
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -76,6 +90,12 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapGets();
-app.MapPuts();
-app.Run();
+
+
+using (var scope = app.Services.CreateScope())  {
+    var services = scope.ServiceProvider.GetServices<RouterBase>();
+    foreach (var item in services) {
+        item.AddRoutes(app);
+    }
+    app.Run();
+}
